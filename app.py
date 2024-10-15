@@ -1,6 +1,11 @@
 import streamlit as st
 from PyPDF2 import PdfReader
 import google.generativeai as genai
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Function to extract text from PDF
 def extract_text_from_pdf(pdf_file):
@@ -12,8 +17,9 @@ def extract_text_from_pdf(pdf_file):
 
 # Function to query the PaLM API using the provided API key and model
 def query_palm_api(context, question):
-    # Set the API key for Google PaLM
-    genai.configure(api_key="AIzaSyDFyy38UAFQZiybGucZUUVOaouwFV5KCRE")
+    # Set the API key for Google PaLM from the environment variable
+    api_key = os.getenv("API_KEY")
+    genai.configure(api_key=api_key)
     try:
         # Create the model object for 'gemini-1.5-flash'
         model = genai.GenerativeModel('gemini-1.5-flash')
@@ -25,7 +31,7 @@ def query_palm_api(context, question):
 
 # Streamlit UI
 st.set_page_config(page_title="Document Q&A", layout="wide")
-st.title("📄 Chat With Pdf's")
+st.title("📄 Chat With PDFs")
 st.write("**Upload a PDF or Text file, and ask questions about its content.**")
 
 # File upload section with improved layout
